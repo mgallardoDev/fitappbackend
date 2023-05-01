@@ -1,5 +1,5 @@
-import { Column, Entity, ManyToOne } from 'typeorm';
-import { BaseEntity, UserEntity } from '.';
+import { Column, Entity, ManyToOne, OneToMany } from 'typeorm';
+import { BaseEntity, IngestionEntity, UserEntity } from '.';
 
 @Entity()
 export class FoodEntity extends BaseEntity {
@@ -29,4 +29,7 @@ export class FoodEntity extends BaseEntity {
 
   @ManyToOne(() => UserEntity, (user) => user.ownFoods, { nullable: true })
   user?: UserEntity;
+
+  @OneToMany(() => IngestionEntity, (ingestion) => ingestion.food)
+  ingestions: IngestionEntity[];
 }

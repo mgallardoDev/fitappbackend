@@ -2,6 +2,7 @@ import { Column, Entity, ManyToOne, OneToMany } from 'typeorm';
 import {
   BaseEntity,
   FoodEntity,
+  IngestionEntity,
   MealEntity,
   RoleEntity,
   UserGoalEntity,
@@ -26,4 +27,7 @@ export class UserEntity extends BaseEntity {
 
   @OneToMany(() => UserGoalEntity, (goal) => goal.user)
   goals: UserGoalEntity[];
+
+  @OneToMany(() => IngestionEntity, (ingestion) => ingestion.user)
+  ingestions: IngestionEntity[];
 }

@@ -5,6 +5,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import {
   FoodEntity,
+  IngestionEntity,
   MealEntity,
   RoleEntity,
   UserEntity,
@@ -27,12 +28,13 @@ import { BaseEntity } from 'typeorm';
         database: configService.get('DB_DATABASE'),
         synchronize: true,
         entities: [
+          BaseEntity,
+          FoodEntity,
+          IngestionEntity,
+          MealEntity,
           RoleEntity,
           UserEntity,
-          FoodEntity,
-          MealEntity,
           UserGoalEntity,
-          BaseEntity,
         ],
         autoLoadEntities: true,
         logging: ['error'],

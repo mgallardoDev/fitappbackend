@@ -8,6 +8,6 @@ export class BaseEntity {
   @Column({ type: 'boolean', default: true })
   enabled: boolean;
 
-  @Column('date')
+  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   created_at: Date;
 }

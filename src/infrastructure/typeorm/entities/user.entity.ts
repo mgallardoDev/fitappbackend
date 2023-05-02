@@ -16,7 +16,7 @@ export class UserEntity extends BaseEntity {
   @Column()
   password: string;
 
-  @ManyToOne(() => RoleEntity, (role) => role.users)
+  @ManyToOne(() => RoleEntity)
   role: RoleEntity;
 
   @OneToMany(() => FoodEntity, (food) => food.user)

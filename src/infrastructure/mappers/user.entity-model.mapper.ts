@@ -57,7 +57,7 @@ export class UserEntityModelMapper
     const goals = model.goals?.map((goal) =>
       this.userGoalMapper.toEntity(goal),
     );
-
+    // TODO cambiar el aproach y no usar un new Entoty sino traerse el entity existente en la BD
     const entity = new UserEntity();
     entity.email = model.email;
     entity.password = model.password;

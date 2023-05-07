@@ -3,6 +3,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { UserModule } from './modules/user/user.module';
 import {
   FoodEntity,
   IngestionEntity,
@@ -11,7 +12,6 @@ import {
   UserEntity,
   UserGoalEntity,
 } from './infrastructure/typeorm/entities';
-import { BaseEntity } from 'typeorm';
 
 @Module({
   imports: [
@@ -27,16 +27,15 @@ import { BaseEntity } from 'typeorm';
         password: configService.get('DB_PASSWORD'),
         database: configService.get('DB_DATABASE'),
         synchronize: true,
+        autoLoadEntities: true,
         entities: [
-          BaseEntity,
+          UserEntity,
           FoodEntity,
-          IngestionEntity,
           MealEntity,
           RoleEntity,
-          UserEntity,
           UserGoalEntity,
+          IngestionEntity,
         ],
-        autoLoadEntities: true,
         logging: ['error'],
         logger: 'advanced-console',
         extra: {
@@ -45,6 +44,7 @@ import { BaseEntity } from 'typeorm';
       }),
       inject: [ConfigService],
     }),
+    UserModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -1,16 +1,20 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable, forwardRef } from '@nestjs/common';
 import { UserEntityModelMapper } from '.';
 import { UserGoal } from '../../domain/models';
 import { UserGoalEntity } from '../typeorm/entities';
 import { EntityModelMapper } from './I.entity-model.mapper';
+import { AsyncEntityModelMapper } from './I.async-entity-model.mapper';
 
 @Injectable()
 export class UserGoalEntityModelMapper
-  implements EntityModelMapper<UserGoalEntity, UserGoal>
+  implements AsyncEntityModelMapper<UserGoalEntity, UserGoal>
 {
-  constructor(private readonly userMapper: UserEntityModelMapper) {}
+  constructor(
+    @Inject(forwardRef(() => UserEntityModelMapper))
+    private readonly userMapper: UserEntityModelMapper,
+  ) {}
 
-  toModel(entity: UserGoalEntity): UserGoal {
+  async toModel(entity: UserGoalEntity): Promise<UserGoal> {
     return new UserGoal(
       entity.uid,
       entity.created_at,
@@ -20,11 +24,11 @@ export class UserGoalEntityModelMapper
       entity.protein,
       entity.carbohydrates,
       entity.fat,
-      entity.user ? this.userMapper.toModel(entity.user) : null,
+      entity.user ? await this.userMapper.toModel(entity.user) : null,
     );
   }
 
-  toEntity(domain: UserGoal): UserGoalEntity {
+  async toEntity(domain: UserGoal): Promise<UserGoalEntity> {
     const entity = new UserGoalEntity();
 
     entity.uid = domain.uid;
@@ -36,7 +40,7 @@ export class UserGoalEntityModelMapper
     entity.carbohydrates = domain.carbohydrates;
     entity.fat = domain.fat;
     entity.user = domain.user
-      ? this.userMapper.toEntity(domain.user)
+      ? await this.userMapper.toEntity(domain.user)
       : undefined;
 
     return entity;

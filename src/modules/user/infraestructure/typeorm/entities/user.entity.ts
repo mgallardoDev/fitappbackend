@@ -6,10 +6,13 @@ import {
   MealEntity,
   RoleEntity,
   UserGoalEntity,
-} from './';
+} from '../../../../../infrastructure/typeorm/entities';
 
-@Entity()
+@Entity('user')
 export class UserEntity extends BaseEntity {
+  @Column()
+  name: string;
+
   @Column()
   email: string;
 

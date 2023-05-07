@@ -1,4 +1,5 @@
-import { Base, Food, Meal, User } from '.';
+import { User } from 'src/modules/user';
+import { Base, Food, Meal } from '.';
 
 export class Ingesta extends Base {
   food: Food;

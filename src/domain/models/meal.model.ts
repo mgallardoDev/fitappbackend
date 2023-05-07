@@ -1,4 +1,5 @@
-import { Base, User } from '.';
+import { User } from 'src/modules/user';
+import { Base } from '.';
 
 export class Meal extends Base {
   constructor(

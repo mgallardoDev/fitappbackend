@@ -1,16 +1,19 @@
-import { Injectable } from '@nestjs/common';
-import { EntityModelMapper } from './I.entity-model.mapper';
+import { Inject, Injectable, forwardRef } from '@nestjs/common';
+import { UserEntityModelMapper } from '.';
 import { Food } from '../../domain/models';
 import { FoodEntity } from '../typeorm/entities';
-import { UserEntityModelMapper } from '.';
+import { AsyncEntityModelMapper } from './I.async-entity-model.mapper';
 
 @Injectable()
 export class FoodEntityModelMapper
-  implements EntityModelMapper<FoodEntity, Food>
+  implements AsyncEntityModelMapper<FoodEntity, Food>
 {
-  constructor(private readonly userMapper: UserEntityModelMapper) {}
+  constructor(
+    @Inject(forwardRef(() => UserEntityModelMapper))
+    private readonly userMapper: UserEntityModelMapper,
+  ) {}
 
-  toModel(entity: FoodEntity): Food {
+  async toModel(entity: FoodEntity): Promise<Food> {
     return new Food(
       entity.uid,
       entity.created_at,
@@ -23,11 +26,11 @@ export class FoodEntityModelMapper
       entity.fat,
       entity.serving_size,
       entity.serving_unit,
-      this.userMapper.toModel(entity.user),
+      await this.userMapper.toModel(entity.user),
     );
   }
 
-  toEntity(domain: Food): FoodEntity {
+  async toEntity(domain: Food): Promise<FoodEntity> {
     const entity = new FoodEntity();
 
     entity.uid = domain.uid;
@@ -41,7 +44,7 @@ export class FoodEntityModelMapper
     entity.fat = domain.fat;
     entity.serving_size = domain.servingSize;
     entity.serving_unit = domain.servingUnit;
-    entity.user = this.userMapper.toEntity(domain.user);
+    entity.user = await this.userMapper.toEntity(domain.user);
 
     return entity;
   }

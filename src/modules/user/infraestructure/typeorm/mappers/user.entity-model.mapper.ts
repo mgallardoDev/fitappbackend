@@ -29,18 +29,22 @@ export class UserEntityModelMapper
   ) {}
 
   async toModel(entity: UserEntity): Promise<User> {
-    console.log(entity) 
-     
     const role = this.roleMapper.toModel(entity.role);
-    const ownFoods = await Promise.all(
-      entity.ownFoods?.map((food) => this.foodMapper.toModel(food)),
-    );
-    const ownMeals = await Promise.all(
-      entity.ownMeals?.map((meal) => this.mealMapper.toModel(meal)),
-    );
-    const goals = await Promise.all(
-      entity.goals?.map((goal) => this.userGoalMapper.toModel(goal)),
-    );
+    const ownFoods = entity.ownFoods
+      ? await Promise.all(
+          entity.ownFoods.map((food) => this.foodMapper.toModel(food)),
+        )
+      : [];
+    const ownMeals = entity.ownMeals
+      ? await Promise.all(
+          entity.ownMeals?.map((meal) => this.mealMapper.toModel(meal)),
+        )
+      : [];
+    const goals = entity.goals
+      ? await Promise.all(
+          entity.goals?.map((goal) => this.userGoalMapper.toModel(goal)),
+        )
+      : [];
 
     return new User(
       entity.name,

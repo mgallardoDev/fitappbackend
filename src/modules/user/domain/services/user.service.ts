@@ -10,6 +10,8 @@ export class UserService {
     const { name, email, password, role = null } = createUserDto;
 
     const userExists = await this.userRepository.getByEmail(email);
+    console.log(userExists) 
+     
     if (userExists) {
       throw new Error('User already exists');
     }

@@ -1,4 +1,10 @@
-import { CallHandler, ExecutionContext, Global, Injectable, NestInterceptor } from '@nestjs/common';
+import {
+  CallHandler,
+  ExecutionContext,
+  Global,
+  Injectable,
+  NestInterceptor,
+} from '@nestjs/common';
 import { Observable, map } from 'rxjs';
 import { ApiResponse } from '../../api-responses/api.response';
 import { Reflector } from '@nestjs/core';
@@ -9,6 +15,8 @@ export class TransformResponseInterceptor<T>
   implements NestInterceptor<T, ApiResponse<T>>
 {
   constructor(private reflector: Reflector) {}
+  order = 3;
+  
   intercept(
     context: ExecutionContext,
     next: CallHandler,
@@ -16,11 +24,11 @@ export class TransformResponseInterceptor<T>
     return next.handle().pipe(
       map((data) => ({
         status: context.switchToHttp().getResponse().statusCode,
-        message: "aaaaaa",
-          // this.reflector.get<string>(
-          //   'response_message',
-          //   context.getHandler(),
-          // ) || '',
+        message:
+          this.reflector.get<string>(
+            'response-message',
+            context.getHandler(),
+          ) || '',
         metadata: data,
       })),
     );

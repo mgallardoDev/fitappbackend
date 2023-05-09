@@ -2,6 +2,8 @@ import { Body, Controller, HttpCode, HttpStatus, Post, UseInterceptors } from '@
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CreateUserDto, User, UserService } from '../..';
 import { TransformResponseInterceptor } from 'src/common';
+import { ResponseMessage } from 'src/common/application/decorators/response-message/response-message.decorator';
+import { UserApiResponses } from '../api-responses/user.responses';
 
 @Controller('user')
 @ApiTags('user')
@@ -10,13 +12,12 @@ export class UserController {
 
 
 
-  //TODO crear decoradore ResponseMessage que inyecte el mensaje de respuesta y meterlo en el TransformResponseInterceptor
   @Post('create')
   @HttpCode(HttpStatus.CREATED)
-  @UseInterceptors(TransformResponseInterceptor)
+  @ResponseMessage(UserApiResponses.CREATED)
   @ApiResponse({
     status: 201,
-    description: 'The user has been successfully created.',
+    description: UserApiResponses.CREATED,
   })
   @ApiResponse({ status: 400, description: 'Bad Request.' })
   async createUser(@Body() createUserDto: CreateUserDto): Promise<User> {

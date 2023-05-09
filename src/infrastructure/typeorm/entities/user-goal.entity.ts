@@ -1,7 +1,7 @@
 import { Column, Entity, ManyToOne } from 'typeorm';
 import { BaseEntity, UserEntity } from '.';
 
-@Entity()
+@Entity('user_goal')
 export class UserGoalEntity extends BaseEntity {
   @Column('date')
   date: Date;

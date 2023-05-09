@@ -1,7 +1,7 @@
 import { Entity, Column, ManyToOne } from 'typeorm';
 import { BaseEntity, FoodEntity, MealEntity, UserEntity } from './';
 
-@Entity()
+@Entity('ingestion')
 export class IngestionEntity extends BaseEntity {
   @Column()
   quantity: number;

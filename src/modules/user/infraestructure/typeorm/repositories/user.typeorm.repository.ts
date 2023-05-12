@@ -28,7 +28,7 @@ export class UserTypeOrmRepository implements UserRepository {
 
   async getByEmail(email: string): Promise<User> {
     const user = await this.userRepository.findOne({ where: { email }, relations: ['role'] });
-    console.log(user)     
+    // console.log(user)     
     return user ? this.userMapper.toModel(user) : null;
   }
 

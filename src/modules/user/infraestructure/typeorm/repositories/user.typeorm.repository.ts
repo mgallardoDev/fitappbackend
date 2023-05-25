@@ -4,6 +4,7 @@ import { UserEntity } from '../../../../../infrastructure/typeorm/entities';
 import { UserEntityModelMapper } from 'src/infrastructure/mappers';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/modules/user';
+import { GetUserDto } from 'src/modules/user/application/dtos/get-user.dto';
 
 export class UserTypeOrmRepository implements UserRepository {
   constructor(
@@ -26,8 +27,8 @@ export class UserTypeOrmRepository implements UserRepository {
     return this.userMapper.toModel(user);
   }
 
-  async getByEmail(email: string): Promise<User> {
-    const user = await this.userRepository.findOne({ where: { email }, relations: ['role'] });
+  async getOne(userEntityPartial: Partial<UserEntity>): Promise<User> {
+    const user = await this.userRepository.findOne({ where: userEntityPartial, relations: ['role'] });
     // console.log(user)     
     return user ? this.userMapper.toModel(user) : null;
   }

@@ -14,15 +14,9 @@ import {
 export function ValidateOneAndOnlyOneParam(
   props: string[],
   validationOptions?: ValidationOptions,
-) {
-  console.log(`'ValidateOneAndOnlyOneParam'`) 
-   
-  return function (object: object, a: any) {
-console.log('a',  a) 
- 
+) {   
+  return function (object: object, a: any) { 
     const propsString = props.join(', ');
-     
-
     validationOptions = validationOptions ?? {};
 
     validationOptions.message =
@@ -36,7 +30,6 @@ console.log('a',  a)
       options: validationOptions,
       validator: {
         validate(value: any, args: ValidationArguments) {
-          console.log(args) 
            
           let count = 0;
           props.forEach((prop) => {

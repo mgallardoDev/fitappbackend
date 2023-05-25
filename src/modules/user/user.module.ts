@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 // import { UserTypeOrmRepository } from './infraestructure/typeorm/repositories/user.typeorm.repository';
 import { UserController } from './application/controllers/user.controller';
-import { UserService } from './domain/services/user.service';
+import { UserService, UserRepository } from './';
 import { RoleEntity } from './infraestructure/typeorm/entities/role.entity';
 import {
   BaseEntity,
@@ -36,7 +36,7 @@ import { RoleTypeOrmRepository } from './infraestructure/typeorm/repositories/ro
   controllers: [UserController],
   providers: [
     UserService,
-    UserTypeOrmRepository,
+    { provide: 'UserRepository', useClass: UserTypeOrmRepository },
     RoleTypeOrmRepository,
     UserEntityModelMapper,
     MealEntityModelMapper,

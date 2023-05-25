@@ -29,7 +29,7 @@ export class TransformResponseInterceptor<T>
             'response-message',
             context.getHandler(),
           ) || '',
-        metadata: data,
+        data: data,
       })),
     );
   }

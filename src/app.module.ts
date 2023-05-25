@@ -12,6 +12,8 @@ import {
   UserEntity,
   UserGoalEntity,
 } from './infrastructure/typeorm/entities';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { AuthModule } from './modules/auth/auth.module';
 
 @Module({
   imports: [
@@ -45,6 +47,7 @@ import {
       inject: [ConfigService],
     }),
     UserModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -3,38 +3,41 @@ import {
   Controller,
   HttpCode,
   HttpStatus,
-  Post
+  Post,
+  UseFilters
 } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import {
-  ResponseMessage
+  ResponseMessage, GetResponseMessages
 } from 'src/common/application/decorators/response-message/response-message.decorator';
 import { CreateUserDto, User, UserService } from '../..';
-import { UserApiResponses } from '../api-responses/user.responses';
 import { GetUserDto } from '../dtos/get-user.dto';
+import { ApiResponses } from 'src/common';
+import { HttpExceptionFilter } from 'src/common/application/exception-filters/http-exception.filter';
 
 @Controller('user')
+@UseFilters(HttpExceptionFilter)
 @ApiTags('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Post('create')
   @HttpCode(HttpStatus.CREATED)
-  @ResponseMessage(UserApiResponses.CREATED)
-  // @ApiResponse({
-  //   status: 201,
-  //   description: UserApiResponses.CREATED,
-  // })
-  // @ApiResponse({ status: 400, description: 'Bad Request.' })
+  @ResponseMessage(ApiResponses.CREATED)
+  @ApiResponse({
+    status: 201,
+    description: ApiResponses.CREATED,
+  })
+  @ApiResponse({ status: 400, description: 'Bad Request.' })
  createUser(@Body() createUserDto: CreateUserDto): Promise<User> {
     return this.userService.create(createUserDto);
   }
 
   @Post()
-  // @GetResponseMessages({
-  //   one: { getOneFound: 'loHay', getOneNotFound: ' no lo hay' },
-  // })
-  getUser(@Body() getUserDto: GetUserDto) {
+  @GetResponseMessages({
+    one: { getOneFound: ApiResponses.GET_ONE, getOneNotFound: ApiResponses.NOT_FOUND },
+  })
+  getUser(@Body() getUserDto: GetUserDto):Promise<User> {
     try {
       return this.userService.getUser(getUserDto);
     } catch (error) {

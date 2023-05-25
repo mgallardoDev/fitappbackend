@@ -49,7 +49,7 @@ export class UserEntityModelMapper
     return new User(
       entity.name,
       entity.email,
-      entity.password,
+      entity.password,  
       role,
       entity.uid,
       entity.created_at,

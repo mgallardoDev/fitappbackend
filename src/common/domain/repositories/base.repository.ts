@@ -1,7 +1,7 @@
-export interface BaseRepository<T> {
-  getAll(): Promise<T[]>;
-  getById(id: string): Promise<T | null>;
-  create(model: T): Promise<T>;
-  update(model: T): Promise<void>;
-  delete(id: string): Promise<void>;
+export abstract class BaseRepository<T> {
+  abstract getAll(): Promise<T[]>;
+  abstract getByUid(id: string): Promise<T | null>;
+  abstract create(model: T): Promise<T>;
+  abstract update(model: T): Promise<void>;
+  abstract delete(id: string): Promise<void>;
 }

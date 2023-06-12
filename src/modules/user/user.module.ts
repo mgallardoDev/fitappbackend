@@ -21,9 +21,20 @@ import {
   UserGoalEntityModelMapper,
 } from 'src/infrastructure/mappers';
 import { RoleTypeOrmRepository } from './infraestructure/typeorm/repositories/role.typeorm.repository';
+import { RoleRepository } from './domain/repositories/role.repository';
+import { ConfigModule } from '@nestjs/config';
 
+const UserRepositoryProvider = {
+  provide: UserRepository,
+  useClass: UserTypeOrmRepository,
+};
+const RoleRepositoryProvider = {
+  provide: RoleRepository,
+  useClass: RoleTypeOrmRepository,
+};
 @Module({
   imports: [
+    ConfigModule,
     TypeOrmModule.forFeature([
       UserEntity,
       MealEntity,
@@ -36,8 +47,8 @@ import { RoleTypeOrmRepository } from './infraestructure/typeorm/repositories/ro
   controllers: [UserController],
   providers: [
     UserService,
-    { provide: 'UserRepository', useClass: UserTypeOrmRepository },
-    RoleTypeOrmRepository,
+    UserRepositoryProvider,
+    RoleRepositoryProvider,
     UserEntityModelMapper,
     MealEntityModelMapper,
     FoodEntityModelMapper,
@@ -46,8 +57,6 @@ import { RoleTypeOrmRepository } from './infraestructure/typeorm/repositories/ro
   ],
   exports: [
     UserService,
-    UserTypeOrmRepository,
-    RoleTypeOrmRepository,
     UserEntityModelMapper,
     MealEntityModelMapper,
   ],

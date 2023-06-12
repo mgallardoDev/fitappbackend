@@ -2,6 +2,7 @@ import { Inject, Injectable, forwardRef } from '@nestjs/common';
 
 import { AsyncEntityModelMapper } from 'src/infrastructure/mappers/I.async-entity-model.mapper';
 import { User } from 'src/modules/user';
+import { RoleRepository } from 'src/modules/user/domain/repositories/role.repository';
 import {
   FoodEntityModelMapper,
   MealEntityModelMapper,
@@ -9,15 +10,14 @@ import {
   UserGoalEntityModelMapper,
 } from '../../../../../infrastructure/mappers';
 import { UserEntity } from '../../../../../infrastructure/typeorm/entities';
-import { RoleTypeOrmRepository } from '../repositories/role.typeorm.repository';
 
 @Injectable()
 export class UserEntityModelMapper
   implements AsyncEntityModelMapper<UserEntity, User>
 {
   constructor(
-    @Inject(forwardRef(() => RoleTypeOrmRepository))
-    private roleTypeOrmRepository: RoleTypeOrmRepository,
+    @Inject(forwardRef(() => RoleRepository))
+    private roleRepository: RoleRepository,
     @Inject(forwardRef(() => MealEntityModelMapper))
     private mealMapper: MealEntityModelMapper,
     @Inject(forwardRef(() => FoodEntityModelMapper))
@@ -62,7 +62,7 @@ export class UserEntityModelMapper
 
   async toEntity(model: User): Promise<UserEntity> {
     const role = this.roleMapper.toEntity(
-      model.role ?? (await this.roleTypeOrmRepository.getDefault()),
+      model.role ?? (await this.roleRepository.getDefault()),
     );
 
     const ownFoods = await Promise.all(

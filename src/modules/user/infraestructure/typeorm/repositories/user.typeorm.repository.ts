@@ -21,7 +21,7 @@ export class UserTypeOrmRepository implements UserRepository {
     return usersModels;
   }
 
-  async getById(uid: string): Promise<User | null> {
+  async getByUid(uid: string): Promise<User | null> {
     const user = await this.userRepository.findOne({ where: { uid } });
     if (!user) return null;
     return this.userMapper.toModel(user);
@@ -29,7 +29,6 @@ export class UserTypeOrmRepository implements UserRepository {
 
   async getOne(userEntityPartial: Partial<UserEntity>): Promise<User> {
     const user = await this.userRepository.findOne({ where: userEntityPartial, relations: ['role'] });
-    // console.log(user)     
     return user ? this.userMapper.toModel(user) : null;
   }
 

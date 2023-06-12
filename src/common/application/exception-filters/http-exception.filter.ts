@@ -15,7 +15,6 @@ export class HttpExceptionFilter implements ExceptionFilter {
     const response = ctx.getResponse<Response>();
     const request = ctx.getRequest<Request>();
     const status = exception.getStatus();
-    console.log(exception instanceof ValidationError) 
      
     const jsonResponse: ApiResponse<Error> = {
       status,
@@ -23,6 +22,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
       path: request.url,
       method: request.method,
       timestamp: new Date().toISOString(),
+      message: exception.message
     };
 
     response.status(status).json(jsonResponse);

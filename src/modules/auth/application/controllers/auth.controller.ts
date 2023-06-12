@@ -1,17 +1,23 @@
-import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
-import { AuthService } from '../services/auth.service';
-import { LoginDto } from '../dtos/login.dto';
+import { Controller, HttpCode, HttpStatus, Post, Request, UseFilters, UseGuards } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
+import { ResponseMessage } from 'src/common/application/decorators/response-message/response-message.decorator';
+import { HttpExceptionFilter } from 'src/common/application/exception-filters/http-exception.filter';
+import { AuthService } from '../../domain/services/auth.service';
+import { AuthResponseMessage } from '../api-response-messages/auth.response-messages';
+import { AuthRoutes } from '../api-routes/auth-routes';
 
-@Controller('auth')
+@Controller(AuthRoutes.MAIN)
+@UseFilters(HttpExceptionFilter)
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-
-  @Post('/login')
+  @UseGuards(AuthGuard('local'))
+  @Post(AuthRoutes.LOGIN)
   @HttpCode(HttpStatus.OK)
-  async login(@Body() loginDto: LoginDto) {
-    const token = await this.authService.login(loginDto);
-    return { token };
+  @ResponseMessage(AuthResponseMessage.SUCCES)
+  async login(@Request() req) {
+    console.log(req.user) 
+     
+    return req.user;
   }
 }
- 

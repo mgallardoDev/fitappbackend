@@ -4,24 +4,26 @@ import {
   HttpCode,
   HttpStatus,
   Post,
-  UseFilters
+  UseFilters,
 } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
-import {
-  ResponseMessage, GetResponseMessages
-} from 'src/common/application/decorators/response-message/response-message.decorator';
-import { CreateUserDto, User, UserService } from '../..';
-import { GetUserDto } from '../dtos/get-user.dto';
 import { ApiResponses } from 'src/common';
+import { CommonRoutes } from 'src/common/application/api-responses/common-routes';
+import {
+  ResponseMessage
+} from 'src/common/application/decorators/response-message/response-message.decorator';
 import { HttpExceptionFilter } from 'src/common/application/exception-filters/http-exception.filter';
+import { CreateUserDto, User, UserService } from '../..';
+import { UserRoutes } from '../api-routes/user-routes';
+import { GetUserDto } from '../dtos/get-user.dto';
 
-@Controller('user')
+@Controller(UserRoutes.MAIN)
 @UseFilters(HttpExceptionFilter)
 @ApiTags('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @Post('create')
+  @Post(CommonRoutes.CREATE)
   @HttpCode(HttpStatus.CREATED)
   @ResponseMessage(ApiResponses.CREATED)
   @ApiResponse({
@@ -29,19 +31,16 @@ export class UserController {
     description: ApiResponses.CREATED,
   })
   @ApiResponse({ status: 400, description: 'Bad Request.' })
- createUser(@Body() createUserDto: CreateUserDto): Promise<User> {
+  createUser(@Body() createUserDto: CreateUserDto): Promise<User> {
+    console.log(createUserDto);
+
     return this.userService.create(createUserDto);
   }
 
-  @Post()
-  @GetResponseMessages({
-    one: { getOneFound: ApiResponses.GET_ONE, getOneNotFound: ApiResponses.NOT_FOUND },
-  })
-  getUser(@Body() getUserDto: GetUserDto):Promise<User> {
-    try {
+  @Post(CommonRoutes.GET_ONE)
+  @HttpCode(HttpStatus.OK)
+  @ResponseMessage(ApiResponses.GET_ONE)
+  getUser(@Body() getUserDto: GetUserDto): Promise<User> {
       return this.userService.getUser(getUserDto);
-    } catch (error) {
-      console.error(error);
-    }
   }
 }

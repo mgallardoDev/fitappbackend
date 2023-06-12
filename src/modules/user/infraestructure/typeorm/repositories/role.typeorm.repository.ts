@@ -11,6 +11,9 @@ export class RoleTypeOrmRepository implements RoleRepository {
     @InjectRepository(RoleEntity)
     private readonly roleRepository: Repository<RoleEntity>,
   ) {}
+  getByUid(id: string): Promise<Role> {
+    throw new Error('Method not implemented.');
+  }
   getAll(): Promise<Role[]> {
     throw new Error('Method not implemented.');
   }

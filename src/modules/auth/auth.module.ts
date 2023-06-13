@@ -10,6 +10,7 @@ import { UserRepository } from '../user';
 import { UserTypeOrmRepository } from '../user/infraestructure/typeorm/repositories/user.typeorm.repository';
 import { PassportModule } from '@nestjs/passport';
 import { LocalStrategy } from './application/passport-strategy/local-strategy';
+import { JwtStrategy } from './application/passport-strategy/jwt.strategy';
 
 const UserRepositoryProvider = {
   provide: UserRepository,
@@ -32,6 +33,6 @@ const UserRepositoryProvider = {
     UserModule,
   ],
   controllers: [AuthController],
-  providers: [AuthService, LocalStrategy, UserRepositoryProvider],
+  providers: [AuthService, LocalStrategy, JwtStrategy, UserRepositoryProvider],
 })
 export class AuthModule {}

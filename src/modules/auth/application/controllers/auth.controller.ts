@@ -15,9 +15,9 @@ export class AuthController {
   @Post(AuthRoutes.LOGIN)
   @HttpCode(HttpStatus.OK)
   @ResponseMessage(AuthResponseMessage.SUCCES)
-  async login(@Request() req) {
-    console.log(req.user) 
+  async login(@Request() req) {     
+    console.log(req) 
      
-    return req.user;
+    return {token: req.user.token};
   }
 }

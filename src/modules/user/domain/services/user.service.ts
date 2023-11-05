@@ -8,12 +8,15 @@ import { UserApiResponses } from '../../application/api-response-messages/user.r
 import { GetUserDto } from '../../application/dtos/get-user.dto';
 import * as bcrypt from 'bcrypt';
 import { ConfigService } from '@nestjs/config';
+import { UserModelDtoMapper } from '../../application/mappers/user.model-responsedto.mapper';
+import { UserResponseDto } from '../../application/dtos/user-response.dto';
 
 @Injectable()
 export class UserService {
   constructor(
     private configService: ConfigService,
     private readonly userRepository: UserRepository,
+    private readonly mapper: UserModelDtoMapper,
   ) {}
 
   async create(createUserDto: CreateUserDto): Promise<User> {
@@ -30,11 +33,11 @@ export class UserService {
     return await this.userRepository.create(user);
   }
 
-  async getUser(getUserDto: GetUserDto): Promise<User> {
+  async getUser(getUserDto: GetUserDto): Promise<UserResponseDto> {
     const user = await this.userRepository.getOne(getUserDto);
     if (!user) {
       throw new NotFoundException(UserApiResponses.USER_NOT_FOUND);
     }
-    return user;
+    return this.mapper.toUserDto(user);
   }
 }

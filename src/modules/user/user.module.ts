@@ -23,6 +23,7 @@ import {
 import { RoleTypeOrmRepository } from './infraestructure/typeorm/repositories/role.typeorm.repository';
 import { RoleRepository } from './domain/repositories/role.repository';
 import { ConfigModule } from '@nestjs/config';
+import { UserModelDtoMapper } from './application/mappers/user.model-responsedto.mapper';
 
 const UserRepositoryProvider = {
   provide: UserRepository,
@@ -54,6 +55,7 @@ const RoleRepositoryProvider = {
     FoodEntityModelMapper,
     RoleEntityModelMapper,
     UserGoalEntityModelMapper,
+    UserModelDtoMapper
   ],
   exports: [
     UserService,
